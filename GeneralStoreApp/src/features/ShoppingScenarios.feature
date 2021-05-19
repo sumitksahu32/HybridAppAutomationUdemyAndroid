@@ -29,7 +29,7 @@ Scenario: Validate the gestures of Long Press and navigate to WebView
   Given User launches General store app
   When User fills form
   Then User lands to Home Page
-  And User selects "multiple" product and adds to cart
+  And User selects "Air Jordan 4 Retro" product and adds to cart
   And User verifies total amount is correct
   And User navigates to Web View
   And User completes the task
@@ -39,7 +39,7 @@ Scenario: Automate Hybrid App with context switch
   Given User launches General store app
   When User fills form
   Then User lands to Home Page
-  And User selects "multiple" product and adds to cart
+  And User selects "Jordan Lift Off" product and adds to cart
   And User verifies total amount is correct
   And User navigates to Web View
   And User completes the task

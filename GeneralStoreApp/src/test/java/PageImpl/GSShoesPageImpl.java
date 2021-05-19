@@ -2,21 +2,18 @@ package PageImpl;
 
 import Pages.GSShoesPage;
 import com.opencsv.CSVReader;
+import com.sun.deploy.association.utility.AppUtility;
 import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.touch.TapOptions;
-import io.appium.java_client.touch.offset.ElementOption;
-import io.cucumber.messages.internal.com.google.protobuf.Internal;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
+import utilities.AppUtilities;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.time.Duration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -25,7 +22,6 @@ import java.util.concurrent.TimeUnit;
 import static io.appium.java_client.touch.LongPressOptions.longPressOptions;
 import static io.appium.java_client.touch.TapOptions.tapOptions;
 import static io.appium.java_client.touch.offset.ElementOption.element;
-import static java.lang.Thread.sleep;
 import static java.time.Duration.ofSeconds;
 
 public class GSShoesPageImpl extends GSBaseClassImpl implements GSShoesPage {
@@ -37,13 +33,15 @@ public class GSShoesPageImpl extends GSBaseClassImpl implements GSShoesPage {
     {
         AndroidDriver<MobileElement> driver = GSBaseClassImpl.driver;
     }
+
     @Override
     public void FillForm() {
 
         driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
         driver.findElement(countryDropDown).click();
-        driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"Austria\"));").click();
-
+        //driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"Austria\"));").click();
+        AppUtilities apu = new AppUtilities(driver);
+        apu.scrollToTextAndClick("Austria");
         //   driver.findElement(MobileBy.AndroidUIAutomator("new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().textMatches(\"" + containedText + "\").instance(0))"));
         //driver.findElement(By.xpath("//*[@text='Argentina']")).click();
 
@@ -83,9 +81,9 @@ public class GSShoesPageImpl extends GSBaseClassImpl implements GSShoesPage {
     }
 
     @Override
-    public void searchAndAddToCart(String itemName) throws InterruptedException {
+    public void searchAndAddToCart(String itemName) throws Exception {
 
-        List<MobileElement> ls = driver.findElements(By.xpath("//*[contains(@resource-id,'com.androidsample.generalstore:id/rvProductList')]"));
+        List<MobileElement> ls = driver.findElements(By.xpath("//*[contains(@resource-id,'com.androidsample.generalstore:id/productName')]"));
         List<MobileElement> lsAddLink = driver.findElements(By.xpath("//*[contains(@resource-id,'com.androidsample.generalstore:id/productAddCart')]"));
         int loc = 0;
 
@@ -95,55 +93,56 @@ public class GSShoesPageImpl extends GSBaseClassImpl implements GSShoesPage {
             lsAddLink.get(0).click();
             lsAddLink.get(1).click();
 
-            /*
-            try {
-                File fs = new File("src/main/resources");
-                File csvFile = new File(fs, "TestData.csv");
-                String abPath = csvFile.getAbsolutePath();
+//                File fs = new File("src/main/resources");
+//                File csvFile = new File(fs, "TestData.csv");
+//                String abPath = csvFile.getAbsolutePath();
+//
+//                CSVReader read = new CSVReader(new FileReader(abPath));
+//                List<String[]> record = read.readAll();
+//                Iterator<String[]> itr = record.iterator();
+//
+//                while(itr.hasNext())
+//                {
+//                    String[] sArr = itr.next();
+//
+//                        String prdName  = sArr[0];
+//                        loc=0;
+////                        //String temp="new UiScrollable(new UiSelector()).scrollIntoView(text(\"" + prdName + "\"));";
+////                        String temp = "new UiScrollable(new UiSelector().resourceId(\"com.androidsample.generalstore:id/rvProductList\")).scrollIntoView(new UiSelector().textMatches(\"" + prdName + "\").instance(0));";
+////                        driver.findElementByAndroidUIAutomator(temp).click();
+//                    AppUtilities apu = new AppUtilities(driver);
+//                    apu.scrollToTextAndClickInherited(prdName);
+//                    driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+//
+//                    ls = driver.findElements(By.xpath("//*[contains(@resource-id,'com.androidsample.generalstore:id/productName')]"));
+//                    lsAddLink = driver.findElements(By.xpath("//*[contains(@resource-id,'com.androidsample.generalstore:id/productAddCart')]"));
+//
+//                    for(int j=0;j<ls.size();j++)
+//                        {
+//                            if(ls.get(j).getText().equalsIgnoreCase(prdName))
+//                            {
+//                                lsAddLink.get(j).click();
+//                                break;
+//                            }
+//                        }
+//                }
 
-                CSVReader read = new CSVReader(new FileReader(abPath));
-                List<String[]> record = read.readAll();
-                Iterator<String[]> itr = record.iterator();
-
-                while(itr.hasNext())
-                {
-                    String[] sArr = itr.next();
-
-                        String prdName  = sArr[0];
-                        loc=0;
-                        //String temp="new UiScrollable(new UiSelector()).scrollIntoView(text(\"" + prdName + "\"));";
-                        String temp = "new UiScrollable(new UiSelector().resourceId(\"com.androidsample.generalstore:id/rvProductList\")).scrollIntoView(new UiSelector().textMatches(\"" + prdName + "\").instance(0));";
-                        driver.findElementByAndroidUIAutomator(temp).click();
-
-                        for(int j=0;j<ls.size();j++)
-                        {
-                            if(ls.get(j).getText().equalsIgnoreCase(prdName))
-                            {
-                                loc=j;
-                                break;
-                            }
-                        }
-                }
-                    driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-                    lsAddLink.get(loc).click();
-            }
-            catch(Exception e)
-            {
-                e.printStackTrace();
-            }
-
-            */
 
             driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
             driver.findElement(cartIcon).click();
         }
-        else {
+        else{
             driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-            String temp = "new UiScrollable(new UiSelector().resourceId(\"com.androidsample.generalstore:id/rvProductList\")).scrollIntoView(new UiSelector().textMatches(\"" + itemName + "\").instance(0));";
+            AppUtilities apu = new AppUtilities(driver);
+            //apu.scrollToTextAndClickInherited(itemName);
+            apu.scrollToTextAndClick(itemName);
+            driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+
+            ls = driver.findElements(By.xpath("//*[contains(@resource-id,'com.androidsample.generalstore:id/productName')]"));
+            lsAddLink = driver.findElements(By.xpath("//*[contains(@resource-id,'com.androidsample.generalstore:id/productAddCart')]"));
             loc = 0;
 
-            //driver.findElementByAndroidUIAutomator(temp);
-            driver.findElement(MobileBy.AndroidUIAutomator("new UiScrollable(new UiSelector().resourceId(\"com.androidsample.generalstore:id/rvProductList\")).scrollIntoView(new UiSelector().textMatches(\"Jordan 6 Rings\").instance(0))"));
+            //driver.findElement(MobileBy.AndroidUIAutomator("new UiScrollable(new UiSelector().resourceId(\"com.androidsample.generalstore:id/rvProductList\")).scrollIntoView(new UiSelector().textMatches(\"Jordan 6 Rings\").instance(0))"));
 
             for (int i = 0; i < ls.size(); i++) {
                 if (ls.get(i).getText().equalsIgnoreCase(itemName)) {

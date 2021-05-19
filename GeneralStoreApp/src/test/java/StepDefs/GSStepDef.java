@@ -8,6 +8,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import com.google.inject.Inject;
 
+import java.io.FileNotFoundException;
+
 public class GSStepDef  {
 
     GSBaseClassImpl coreObj = new GSBaseClassImpl();
@@ -51,7 +53,7 @@ public class GSStepDef  {
     }
 
     @And("User selects {string} product and adds to cart")
-    public void userSelectsProductAndAddsToCart(String arg0) throws InterruptedException {
+    public void userSelectsProductAndAddsToCart(String arg0) throws Exception {
 
         sh.searchAndAddToCart(arg0);
     }

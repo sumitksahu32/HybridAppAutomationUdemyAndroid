@@ -14,10 +14,13 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Time;
 import java.time.Duration;
+import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -30,10 +33,15 @@ public class GSBaseClassImpl implements GSBaseClass {
     public void setup() {
 
         try{
+
+            FileInputStream fis = new FileInputStream("src/main/resources/global.properties");
+            Properties prop = new Properties();
+            prop.load(fis);
+
         DesiredCapabilities ds = new DesiredCapabilities();
-        File ff = new File("src");
-        File appF = new File(ff,"General-Store.apk");
-        ds.setCapability("deviceName","Android Emulator");
+        File ff = new File("src/main/resources");
+        File appF = new File(ff,prop.getProperty("appName"));
+        ds.setCapability("deviceName",prop.getProperty("deviceName"));
         ds.setCapability("platformName","Android");
         ds.setCapability("platformVersion","11.0");
         ds.setCapability("app",appF.getAbsolutePath());
@@ -43,7 +51,7 @@ public class GSBaseClassImpl implements GSBaseClass {
 
         driver = new AndroidDriver<MobileElement>(new URL("http://127.0.0.1:4723/wd/hub"),ds);
         }
-        catch (MalformedURLException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }

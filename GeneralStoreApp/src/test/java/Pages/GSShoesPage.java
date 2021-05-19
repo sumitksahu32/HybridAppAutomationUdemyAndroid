@@ -25,7 +25,7 @@ public interface GSShoesPage {
     void reachedHomePage();
     void blankSubmit();
     void verifyErrorMsg();
-    void searchAndAddToCart(String itemName) throws FileNotFoundException, InterruptedException;
+    void searchAndAddToCart(String itemName) throws FileNotFoundException, InterruptedException, Exception;
     void verifyTotalAmount() throws InterruptedException;
     double getAmount(String input);
     void doGestures() throws InterruptedException;
