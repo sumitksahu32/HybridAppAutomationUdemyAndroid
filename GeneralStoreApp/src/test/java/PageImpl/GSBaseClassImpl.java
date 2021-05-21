@@ -6,17 +6,23 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.android.nativekey.KeyEvent;
 import io.appium.java_client.remote.MobileCapabilityType;
+import io.appium.java_client.service.local.AppiumDriverLocalService;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
 import okio.Timeout;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.*;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
+import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.BeforeTest;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.ServerSocket;
 import java.net.URL;
 import java.sql.Time;
 import java.time.Duration;
@@ -28,6 +34,7 @@ import java.util.concurrent.TimeUnit;
 public class GSBaseClassImpl implements GSBaseClass {
 
     public static AndroidDriver<MobileElement> driver;
+    public static AppiumDriverLocalService ser;
 
     @Override
     public void setup() {
@@ -77,6 +84,61 @@ public class GSBaseClassImpl implements GSBaseClass {
         driver.pressKey(new KeyEvent(AndroidKey.BACK));
         driver.context("NATIVE_APP");
 
+    }
+
+    @Before
+    public void startAppiumServer() {
+
+        boolean status=checkifServerIsRunning(4723);
+
+    if(!status) {
+        ser = AppiumDriverLocalService.buildDefaultService();
+        ser.start();
+    }
+
+    }
+
+    @After
+    public void stopAppiumServer() {
+
+        ser.stop();
+    }
+
+    @Override
+    public boolean checkifServerIsRunning(int port) {
+
+        boolean flag=false;
+        ServerSocket sk;
+        try{
+            sk=new ServerSocket(port);
+            sk.close();
+        }
+        catch(Exception e)
+        {
+            flag=true;
+            e.printStackTrace();
+        }
+        finally {
+            sk=null;
+        }
+
+        return flag;
+    }
+
+    public void startEmulator() throws Exception {
+
+        //Emulator Name = Nexus5XTestAVD
+        String path = System.getProperty("user.dir") + "src/main/resources/startEmulator.bat";
+        Runtime.getRuntime().exec(path);
+        Thread.sleep(7000);
+    }
+
+    @Override
+    public void getScreenShot(String testName) throws IOException {
+
+        String path = System.getProperty("user.dir") + "target" + testName + ".jpg";
+        File snap = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+        FileUtils.copyFile(snap,new File(path));
     }
 
 

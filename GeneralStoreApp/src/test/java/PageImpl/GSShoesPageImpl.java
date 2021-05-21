@@ -10,6 +10,7 @@ import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
+import org.testng.annotations.Test;
 import utilities.AppUtilities;
 
 import java.io.File;
@@ -34,7 +35,6 @@ public class GSShoesPageImpl extends GSBaseClassImpl implements GSShoesPage {
         AndroidDriver<MobileElement> driver = GSBaseClassImpl.driver;
     }
 
-    @Override
     public void FillForm() {
 
         driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
